@@ -14,8 +14,8 @@ from numpy import mean, std
 from xgboost import XGBClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier, plot_tree, export_graphviz
-from sklearn.model_selection import KFold, cross_val_score, StratifiedKFold
-from sklearn.metrics import accuracy_score
+from sklearn.model_selection import KFold, cross_val_score,cross_val_predict, StratifiedKFold
+from sklearn.metrics import accuracy_score, classification_report
 
 # # CSCI 4380 Project
 
@@ -34,7 +34,7 @@ X_test = df_test.loc[:,df_test.columns != 'Label']
 # Extract labels
 y_train = df_train['Label']
 y_test = df_test['Label']
-"""
+
 # -- Exploratory Data Analysis
 # Dataset Size
 print("Train dataset: ")
@@ -67,7 +67,22 @@ plt.xlabel('Label')
 plt.ylabel('Percentage of Dataset')
 plt.xticks(rotation=0)
 plt.show()
-"""
+
+
+# -- Helper Function
+# Evaluation Matrix
+def evaluate(y_test, y_pred):
+    # Accuracy
+    table1 = pd.crosstab(y_pred, y_test, rownames=['Predicted'], colnames=['Expected'], margins=True)
+    print(table1)
+    
+    # Accuracy
+    pred_series = pd.Series(y_pred).groupby(y_pred).size()
+    true_series = pd.Series(y_test.values).groupby(y_test).size()
+    pred_res = pd.DataFrame()
+    pred_res['Expected Label'] = true_series
+    pred_res['Predicted Label'] = pred_series
+    print(pred_res)
 
 # -- Pre-processing
 def preprocess_data(data:pd.DataFrame):
@@ -77,7 +92,7 @@ def preprocess_data(data:pd.DataFrame):
     df[['C1', 'C2', 'C3', 'C4', 'C5']] = df_copy
     df = df[['S1', 'C1', 'S2', 'C2', 'S3', 'C3', 'S4', 'C4', 'S5', 'C5', 'Label']]
     return df
-"""
+
 clrprint("Training Dataset", clr='red')
 print(df_train)
 print()
@@ -93,7 +108,7 @@ print()
 clrprint("Testing Dataset - Sorted", clr='red')
 test_sorted = preprocess_data(df_test)
 print(test_sorted)
-"""
+
 
 # Pre-processed data
 train_sorted = preprocess_data(df_train)
@@ -111,49 +126,73 @@ y_test_sorted = test_sorted['Label']
 # Cross-Validation
 kf = KFold(n_splits=10, random_state=1, shuffle=True)
 
-# -- Decision Tree
-# Base Model
+"""# -- Decision Tree"""
+'''# Base Model'''
 print("Decision Tree - Base Model")
 clf = DecisionTreeClassifier()
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
+# Base Model - Evaluation
 accuracy = accuracy_score(y_test, y_pred, normalize=True)
 print("Accuracy Score: ", accuracy)
+print(classification_report(y_test_sorted, y_pred))
+#evaluate(y_test, y_pred)
+print(y_pred)
+print(len(y_pred))
 print()
 """
+# Tree Graph
 data = export_graphviz(clf, out_file=None,filled=True, rounded=True,special_characters=True) 
 graph = graphviz.Source(data) 
 graph.render("Poker")
 """
-# Pre-processed Data
-print("Decision Tree - Pre-processed")
 
+'# Pre-processed Data'
+print("Decision Tree - Pre-processed")
 clf = DecisionTreeClassifier()
+clf.fit(X_train_sorted, y_train_sorted)
+y_pred = clf.predict(X_test_sorted)
+
+# Pre-processed - Evaluation
 scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf)
 print('Accuracy: %.3f (%.3f)' % (mean(scores), std(scores)))
+print(classification_report(y_test_sorted, y_pred))
 print()
 
-# -- Random Forest
+"""# -- Random Forest"""
 print("Random Forest - Pre-processed")
 clf = RandomForestClassifier(criterion='entropy')
+clf.fit(X_train_sorted, y_train_sorted)
+y_pred = clf.predict(X_test_sorted)
 
+# Evaluation
 scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf)
 print('Accuracy: %.3f (%.3f)' % (mean(scores), std(scores)))
+print(classification_report(y_test_sorted, y_pred))
 print()
 
-# -- Gradient Boosting
+"""# -- Gradient Boosting"""
 print("Gradient Boosting - Pre-processed")
 clf = GradientBoostingClassifier(n_estimators=10, random_state=111)
+clf.fit(X_train_sorted, y_train_sorted)
+y_pred = clf.predict(X_test_sorted)
 
+# Evaluation
 scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf)
 print('Accuracy: %.3f (%.3f)' % (mean(scores), std(scores)))
+print(classification_report(y_test_sorted, y_pred))
 print()
 
-# -- Extreme Gradient Boosting
+
+"""# -- Extreme Gradient Boosting"""
 print("Extreme Gradient Boosting - Pre-processed")
 clf = XGBClassifier(n_estimators=10, random_state=111)
+clf.fit(X_train_sorted, y_train_sorted)
+y_pred = clf.predict(X_test_sorted)
 
+# Evaluation
 scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf)
 print('Accuracy: %.3f (%.3f)' % (mean(scores), std(scores)))
+print(classification_report(y_test_sorted, y_pred))
 print()
