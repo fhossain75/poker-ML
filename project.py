@@ -107,7 +107,9 @@ feature_names = list(X_train.columns)
 # Pre-processed labels
 y_train_sorted = train_sorted['Label']
 y_test_sorted = test_sorted['Label']
-#target_names = list(y_train.columns)
+
+# Cross-Validation
+kf = KFold(n_splits=10, random_state=1, shuffle=True)
 
 # -- Decision Tree
 # Base Model
@@ -120,22 +122,38 @@ accuracy = accuracy_score(y_test, y_pred, normalize=True)
 print("Accuracy Score: ", accuracy)
 print()
 """
-data = export_graphviz(clf, out_file=None,
-                                filled=True, rounded=True,
-                                special_characters=True) 
+data = export_graphviz(clf, out_file=None,filled=True, rounded=True,special_characters=True) 
 graph = graphviz.Source(data) 
 graph.render("Poker")
 """
 # Pre-processed Data
 print("Decision Tree - Pre-processed")
-# Cross-Validation
-kf = KFold(n_splits=10, random_state=1, shuffle=True)
+
 clf = DecisionTreeClassifier()
-
-scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf, n_jobs=-1)
+scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf)
 print('Accuracy: %.3f (%.3f)' % (mean(scores), std(scores)))
+print()
 
+# -- Random Forest
+print("Random Forest - Pre-processed")
+clf = RandomForestClassifier(criterion='entropy')
 
+scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf)
+print('Accuracy: %.3f (%.3f)' % (mean(scores), std(scores)))
+print()
 
+# -- Gradient Boosting
+print("Gradient Boosting - Pre-processed")
+clf = GradientBoostingClassifier(n_estimators=10, random_state=111)
 
+scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf)
+print('Accuracy: %.3f (%.3f)' % (mean(scores), std(scores)))
+print()
 
+# -- Extreme Gradient Boosting
+print("Extreme Gradient Boosting - Pre-processed")
+clf = XGBClassifier(n_estimators=10, random_state=111)
+
+scores = cross_val_score(clf, X_train_sorted, y_train_sorted, scoring='accuracy', cv=kf)
+print('Accuracy: %.3f (%.3f)' % (mean(scores), std(scores)))
+print()
