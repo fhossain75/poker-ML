@@ -1,0 +1,181 @@
+\documentclass[jair,twoside,11pt,theapa]{article}
+\usepackage{jair, theapa, rawfonts}
+\usepackage{paralist}
+\usepackage{color}
+\usepackage{graphicx}
+% uncomment to add journal header info
+%\jairheading{1}{1993}{1-15}{6/91}{9/91}
+
+
+\ShortHeadings{Template for Data Mining Report: Short Title}
+{AuthorOne, AuthorTwo \& AthorThree}
+
+%\firstpageno{25}
+
+\begin{document}
+
+% uncommment to remove paragraph indents and add a little vertical space after paragraphs
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.5em}
+
+\title{A Template for Data Mining Reports: The Long Title}
+
+\author{\name Author One \email author1@uga.edu \\
+        \name Author Two \email author2@uga.edu \\
+        \addr Department of Computer Science, University of Georgia
+      
+       \AND
+       \name Author Three \email author2@uga.edu \\
+       \addr Department of English, University of Georgia}
+
+% For research notes, remove the comment character in the line below.
+% \researchnote
+
+\maketitle
+
+
+\begin{abstract}
+The abstract should be one or two paragraphs concisely summarizing the paper. It should describe {\color{blue}\textbf{1) the research objectives, 2) the data set or sets used, 3) the model development (the experiments performed), and 3) the results}}. E.g., if multiple models were developed to classify images, you should identify the data set, the types of models developed, and report the scores of at least the better performing models.
+
+Abstracts should be informative. They should provide readers with enough information to determine what the paper is about and whether it is relevant to them.
+\end{abstract}
+
+\section{Introduction}
+\label{Introduction}
+
+The introduction is generally short (a few pages), but its purpose is similar to the that of the abstract. It is intended to inform. It should:
+{\color{blue}
+\begin{compactenum}
+\item  provide a motivation for the project as well as context for it;
+\item  state the specific research objectives of the project and how they are to be evaluated;
+\item  describe the data sets used and how they are processed;
+\item  describe the experiments performed;
+\item  summarize the primary results (include numbers, if possible).
+\item  outline the remainder of the paper.
+\end{compactenum}}
+\vspace{6pt}
+
+
+The rest of the paper will flesh out the details mentioned in the introduction, but by the end of the introduction, the reader should have a clear idea of what the paper contains and what its main contributions are.
+
+
+\section{Related Work}
+\label{related}
+
+The mini-projects do not require a related works/literature review section, though you may choose to provide one. Your final project report, however, must include one.
+
+The literature review should detail other research that is related to the current work. If other researchers have attacked the same problem or a similar problem, or if other researchers have used the same data set, then their work---and results---should be briefly described. Proper citations should be made.
+
+You should identify a handful of relevant conference or journal papers and describe
+
+{\color{blue}
+\begin{compactenum}
+\item	what the authors were working on;
+\item	their results;
+\item	how their work is relevant to your current work, and also how the current work is different (that is, why is the current work needed?).
+\end{compactenum}}
+
+
+Ideally, you should identify many papers (e.g., 10, 15) that are relevant. You need not understand every detail of them, but you should be able to talk reasonably about what the researchers were doing and how it relates to your work. You might be able to focus on a smaller number (e.g., 1-2) and describe them in more detail than the others. For some, only a few sentences are needed.
+If you are working in teams, it might be efficient to divide the literature review into pieces, each member working on a specific piece.
+
+Here is a citation for a single work \cite{papad}, and here is one for multiple works \cite{simmons-aaai88,hacker}.
+
+\section{Data -- Preprocessing }
+\label{preprocessing}
+
+
+\begin{table}
+  \centering
+  
+  \begin{tabular}{ccc}\hline
+  1 & 2 & 3 \\
+  4 & 5 & 6 \\
+  6 & 8 & 9 \\
+  \hline
+    \end{tabular}
+  \caption{A table.}
+  \label{tab1}
+\end{table}
+
+
+
+This section should present the data sets and the transformations applied to them to make them ready for the machine learning algorithms.
+Regarding the data set itself, you should describe it in some detail. It might be convenient to list the features, their data types, and provide descriptive statistics in the form of a table. Importantly, you should identify characteristics of the data that might have an impact on the learning process.  As for the preprocessing of the data, you should describe any manipulations to the data set that will affect the learning process.
+
+Some questions to think about:
+
+{\color{blue}\begin{compactenum}
+\item Where does the data used come from? Who generated it and for what purpose?
+\item How many records are in the data set?
+\item Is the data set imbalanced? I.e., is one class more frequent than another?
+\item Are there missing values? Does it have other interesting characteristics?
+\item Which features were selected for use in model development? Why were these chosen?
+\item Are the chosen input features scaled?
+\item What other techniques were used to transform the data (and why)? Are these described in sufficient detail that others could achieve the same results?
+\item How is the data set partitioned into training, validation, and testing sets? Is this reasonable for the given problem?
+\end{compactenum}}
+
+The descriptions you provide will help the reader determine whether the models you ultimately develop are reasonable (if you feed bad data into a learning algorithm, then the resulting model will likely be bad as well). Importantly, your descriptions should provide enough detail that another researcher could reproduce your experiments.
+
+
+Table \ref{tab1} is a table. 
+
+\section{Experiments}
+\label{experiments}
+
+You should describe the experiments you performed in sufficient detail that someone else could reproduce them. Regarding the particular machine learning strategies chosen, you should record the configuration for each (the parameter values used).
+
+Some questions to think about:
+
+{\color{blue}\begin{compactenum}
+\item Why were the particular ML frameworks used chosen? Are they particularly suited to the problem?
+\item What hardware and software was used to perform your experiments?
+\item Did any of the ML frameworks require significantly more resources (memory and time) than others?
+\item When running the experiments, were any problems encountered?
+\end{compactenum}}
+
+
+\begin{figure}
+\centering
+  \includegraphics[width=2in]{grogu.jpg}
+  \caption{A JPG inserted into the document.}\label{grogu}
+\end{figure}
+
+Figure \ref{grogu} is a Figure. 
+
+\section{Analysis}
+
+In this section, you present the results of your experiments, being as clear as possible, and you provide an analysis and discussion of them. It is recommended that you present the factual results of your work in a single location as a coherent unit and then, separately, provide an analysis of them. Doing this makes it easier for the reader to identify the key points of your work.
+
+Do not simply record the output of whatever ML framework you used. You should attempt to interpret the results.
+
+{\color{blue}\begin{compactenum}
+\item Are the results significant?
+\item Are the results of the various ML frameworks significantly different?
+\item Is it possible that the data, or the way it was partitioned, or the ML schemes used, or their configuration, resulted in results that are misleading?
+\end{compactenum}}
+
+
+
+\section{Conclusion}
+
+ Here, you can recapitulate, perhaps using only a few sentences, the main results of the paper. You can also discuss ways in which the current work can be extended.
+
+
+\appendix
+\section*{Appendix A.}
+
+If you'd like to include one or more appendices, they can go here. Otherwise, \verb"\appendix"  can be deleted in your source code.
+
+\vskip 0.2in
+\bibliography{sample}
+\bibliographystyle{theapa}
+
+\end{document}
+
+
+
+
+
+
